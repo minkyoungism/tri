@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>트리트먼트 제대로 쓰는 법 | 민경이즘</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple:      #7B5EA7;
+      --purple-light:#A78BCC;
+      --purple-bg:   #EDE8F7;
+      --purple-pale: #F5F1FB;
+      --beige:       #FAF7F4;
+      --beige-dark:  #F0EAE2;
+      --text:        #2D2D2D;
+      --text-sub:    #666;
+      --white:       #FFFFFF;
+      --shadow:      0 4px 20px rgba(123,94,167,.12);
+      --radius:      18px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--beige);
+      color: var(--text);
+      line-height: 1.75;
+    }
+
+    /* ── HERO ─────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(145deg, #ede8f7 0%, #f5f0fb 50%, #faf7f4 100%);
+      padding: 80px 24px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(123,94,167,.08) 0%, transparent 70%);
+      top: -100px; left: 50%; transform: translateX(-50%);
+      pointer-events: none;
+    }
+    .badge {
+      display: inline-block;
+      background: var(--purple);
+      color: #fff;
+      font-size: 12px; font-weight: 600; letter-spacing: .08em;
+      padding: 5px 16px; border-radius: 100px; margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(26px, 5vw, 42px);
+      font-weight: 900; line-height: 1.3; color: var(--text); margin-bottom: 12px;
+    }
+    .hero h1 em { color: var(--purple); font-style: normal; }
+    .hero .sub { font-size: 15px; color: var(--text-sub); margin-bottom: 32px; }
+
+    .author-chip {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--white); border-radius: 100px;
+      padding: 10px 20px; box-shadow: var(--shadow);
+      font-size: 14px; font-weight: 500;
+    }
+    .author-chip .dot {
+      width: 44px; height: 44px; border-radius: 50%;
+      overflow: hidden; border: 2px solid var(--purple-light); flex-shrink: 0;
+    }
+    .author-chip .dot img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+
+    .hero-links {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 20px;
+    }
+    .hero-link-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: #fff; border-radius: 100px; padding: 9px 18px;
+      text-decoration: none; color: #2D2D2D;
+      box-shadow: 0 4px 20px rgba(123,94,167,.12);
+      font-size: 13px; font-weight: 600;
+      transition: transform .15s, box-shadow .15s; white-space: nowrap;
+    }
+    .hero-link-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(123,94,167,.2); }
+
+    /* ── LAYOUT ───────────────────────────────────── */
+    .container { max-width: 760px; margin: 0 auto; padding: 0 20px; }
+    section { padding: 56px 0 0; }
+    section:last-of-type { padding-bottom: 80px; }
+
+    /* ── SECTION TITLE ────────────────────────────── */
+    .sec-label {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 700; letter-spacing: .12em;
+      color: var(--purple); text-transform: uppercase; margin-bottom: 10px;
+    }
+    .sec-label::before {
+      content: ''; display: block; width: 18px; height: 2px;
+      background: var(--purple); border-radius: 2px;
+    }
+    .sec-title { font-size: clamp(20px, 3.5vw, 28px); font-weight: 800; line-height: 1.4; margin-bottom: 6px; }
+    .sec-desc  { font-size: 14px; color: var(--text-sub); margin-bottom: 32px; }
+
+    /* ── CARD ─────────────────────────────────────── */
+    .card {
+      background: var(--white); border-radius: var(--radius);
+      padding: 28px; box-shadow: var(--shadow); margin-bottom: 16px;
+    }
+
+    /* ── COMPARE CARD ─────────────────────────────── */
+    .compare-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    @media (max-width: 540px) {
+      .compare-wrap { grid-template-columns: 1fr; }
+      .closing-profile-grid { grid-template-columns: 1fr !important; }
+    }
+
+    .compare-card { background: var(--white); border-radius: var(--radius); padding: 24px 20px; box-shadow: var(--shadow); }
+    .compare-card .tag {
+      display: inline-block; font-size: 12px; font-weight: 700;
+      padding: 4px 14px; border-radius: 100px; margin-bottom: 16px;
+    }
+    .compare-card.bad  .tag { background: #e8e8e8; color: #555; }
+    .compare-card.good .tag { background: var(--purple); color: #fff; }
+    .compare-card ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .compare-card li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; font-weight: 500; }
+    .compare-card li .icon {
+      width: 22px; height: 22px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; flex-shrink: 0; margin-top: 1px;
+    }
+    .compare-card.bad  li .icon { background: #f0f0f0; color: #999; }
+    .compare-card.good li .icon { background: var(--purple-bg); color: var(--purple); }
+
+    /* ── TARGET LIST ──────────────────────────────── */
+    .target-list { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+    .target-item {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--purple-pale); border-radius: 12px;
+      padding: 14px 18px; font-size: 14px; font-weight: 500;
+    }
+    .target-item .num {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--purple); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0;
+    }
+
+    /* ── PROBLEM BLOCK ────────────────────────────── */
+    .prob-block {
+      background: var(--white); border-radius: var(--radius);
+      padding: 28px; box-shadow: var(--shadow); margin-bottom: 20px;
+    }
+    .prob-block .prob-header { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+    .prob-block .step-badge {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: var(--purple); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 900; flex-shrink: 0;
+    }
+    .prob-block .prob-title { font-size: 17px; font-weight: 800; }
+    .prob-block .prob-sub   { font-size: 13px; color: var(--text-sub); }
+
+    .checklist { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+    .checklist li {
+      display: flex; gap: 10px; align-items: flex-start;
+      font-size: 14px; padding: 12px 14px;
+      background: var(--beige); border-radius: 10px;
+    }
+    .checklist li::before {
+      content: '✓'; width: 20px; height: 20px; border-radius: 50%;
+      background: var(--purple-bg); color: var(--purple);
+      font-size: 11px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 1px;
+    }
+
+    .summary-quote {
+      background: var(--purple-bg); border-left: 4px solid var(--purple);
+      border-radius: 0 12px 12px 0; padding: 14px 18px;
+      font-size: 14px; font-weight: 700; color: var(--purple);
+    }
+
+    /* ── POINT LIST ───────────────────────────────── */
+    .point-list { display: flex; flex-direction: column; gap: 12px; }
+    .point-item {
+      background: var(--white); border-radius: 14px; padding: 20px;
+      box-shadow: var(--shadow); display: flex; gap: 16px; align-items: flex-start;
+    }
+    .point-num {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--purple-bg); color: var(--purple);
+      font-size: 14px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .point-content .point-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .point-content .point-desc  { font-size: 13px; color: var(--text-sub); }
+
+    /* ── FORMULA BOX ──────────────────────────────── */
+    .formula-box {
+      background: var(--purple); border-radius: var(--radius);
+      padding: 32px 28px; color: #fff; text-align: center; margin-bottom: 24px;
+    }
+    .formula-box .f-label {
+      font-size: 11px; font-weight: 700; letter-spacing: .15em;
+      text-transform: uppercase; opacity: .75; margin-bottom: 14px;
+    }
+    .formula-box .f-eq { font-size: clamp(15px, 3vw, 18px); font-weight: 800; line-height: 2; }
+    .formula-box .f-eq span { opacity: .65; font-size: .85em; }
+
+    /* ── TODO LIST ────────────────────────────────── */
+    .todo-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .todo-item {
+      display: flex; gap: 12px; align-items: center;
+      font-size: 14px; padding: 12px 14px;
+      background: var(--beige); border-radius: 10px;
+      cursor: pointer; transition: transform .15s, background .15s, box-shadow .15s;
+    }
+    .todo-item:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(123,94,167,.12); }
+    .todo-item.active {
+      background: var(--purple-bg);
+      box-shadow: inset 0 0 0 1px rgba(123,94,167,.16);
+    }
+    .todo-box {
+      width: 18px; height: 18px; border: 2px solid var(--purple-light); border-radius: 5px;
+      flex-shrink: 0; position: relative; transition: all .2s;
+    }
+    .todo-item.active .todo-box {
+      background: var(--purple); border-color: var(--purple);
+    }
+    .todo-item.active .todo-box::before {
+      content: '✓'; color: #fff; font-size: 11px; font-weight: 800;
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    }
+    .progress-card {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+      background: var(--white); border-radius: 14px; padding: 14px 16px; box-shadow: var(--shadow);
+    }
+    .progress-bar {
+      flex: 1; height: 8px; border-radius: 999px; background: #efe8f7; overflow: hidden;
+    }
+    .progress-bar > span {
+      display: block; height: 100%; width: 0%; background: linear-gradient(90deg, var(--purple), var(--purple-light));
+      transition: width .25s ease;
+    }
+    .progress-text {
+      font-size: 13px; font-weight: 700; color: var(--text-sub); white-space: nowrap;
+    }
+
+    /* ── CLOSING ──────────────────────────────────── */
+    .closing {
+      background: linear-gradient(145deg, #ede8f7, #faf7f4);
+      border-radius: var(--radius); padding: 36px 28px; text-align: center;
+      margin-bottom: 28px; box-shadow: var(--shadow);
+    }
+    .closing p { font-size: 15px; font-weight: 500; line-height: 1.9; color: var(--text); }
+    .closing .author-note { margin-top: 20px; font-size: 13px; color: var(--text-sub); font-style: italic; }
+
+    /* ── CTA LINKS ────────────────────────────────── */
+    .cta-links { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .cta-btn {
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      gap: 8px;
+      background: var(--white); border-radius: 14px; padding: 16px 12px;
+      text-decoration: none; color: var(--text); box-shadow: var(--shadow);
+      font-size: 12px; font-weight: 600; transition: transform .15s, box-shadow .15s;
+    }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(123,94,167,.18); }
+    .cta-btn .icon-box {
+      width: 40px; height: 40px; border-radius: 12px;
+      background: var(--purple-bg); color: var(--purple);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+
+    /* ── DIVIDER ──────────────────────────────────── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--beige-dark), transparent);
+      margin: 40px 0 0;
+    }
+
+    /* ── FOOTER ───────────────────────────────────── */
+    footer {
+      text-align: center; padding: 32px 24px;
+      font-size: 12px; color: #aaa;
+      background: var(--white); margin-top: 56px;
+    }
+    footer strong { color: var(--purple); }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="badge">TREATMENT CARE GUIDE</div>
+    <h1>트리트먼트 꾸준히 발라도<br /><em>모발이 그대로라면</em></h1>
+    <p class="sub">25년 현장 경험으로 정리한 트리트먼트 올바른 사용법</p>
+    <div class="author-chip">
+      <div class="dot">
+        <img src="../profile.png" alt="민경이즘 프로필" />
+      </div>
+      <span>25년차 현장 전문 미용교수 · <strong>민경이즘</strong></span>
+    </div>
+    <div class="hero-links">
+      <a href="https://www.instagram.com/minkyoungism" target="_blank" rel="noopener" class="hero-link-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <defs><linearGradient id="ig" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#f09433"/><stop offset="25%" stop-color="#e6683c"/>
+            <stop offset="50%" stop-color="#dc2743"/><stop offset="75%" stop-color="#cc2366"/>
+            <stop offset="100%" stop-color="#bc1888"/>
+          </linearGradient></defs>
+          <rect x="2" y="2" width="20" height="20" rx="6" fill="url(#ig)"/>
+          <circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="1.8" fill="none"/>
+          <circle cx="17.2" cy="6.8" r="1.2" fill="white"/>
+        </svg>
+        인스타그램
+      </a>
+      <a href="https://www.youtube.com/@minkyoungism" target="_blank" rel="noopener" class="hero-link-btn">▶️ 유튜브</a>
+      <a href="https://blog.naver.com/minkyoungism" target="_blank" rel="noopener" class="hero-link-btn">📝 블로그</a>
+      <a href="https://www.tiktok.com/@minkyoungism" target="_blank" rel="noopener" class="hero-link-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.87a8.2 8.2 0 004.8 1.54V7a4.85 4.85 0 01-1.03-.31z"/></svg>
+        틱톡
+      </a>
+    </div>
+  </div>
+
+  <!-- SECTION 1: OVERVIEW -->
+  <section>
+    <div class="container">
+      <div class="sec-label">Overview</div>
+      <h2 class="sec-title">트리트먼트 꾸준히 하는데 모발 상태는 그대로인 느낌, 있으세요?</h2>
+      <p class="sec-desc">문제는 트리트먼트 자체가 아니라 <strong>바르는 방법</strong>에 있습니다.</p>
+
+      <div class="compare-wrap">
+        <div class="compare-card bad">
+          <span class="tag">효과를 못 보는 습관</span>
+          <ul>
+            <li><span class="icon">✕</span>두피까지 듬뿍 바르기</li>
+            <li><span class="icon">✕</span>흠뻑 젖은 머리에 바로 바르기</li>
+            <li><span class="icon">✕</span>바르고 바로 헹구기</li>
+            <li><span class="icon">✕</span>모발 상태 상관없이 매일 사용</li>
+          </ul>
+        </div>
+        <div class="compare-card good">
+          <span class="tag">효과를 보는 습관</span>
+          <ul>
+            <li><span class="icon">✓</span>모발에만 바르기</li>
+            <li><span class="icon">✓</span>물기 짜고 바르기</li>
+            <li><span class="icon">✓</span>최소 3분 두었다가 헹구기</li>
+            <li><span class="icon">✓</span>주 2~3회 사용하기</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <p style="font-size:14px; font-weight:600; margin-bottom:12px; color:var(--purple)">이런 분께 특히 도움이 됩니다</p>
+        <div class="target-list">
+          <div class="target-item"><div class="num">1</div>트리트먼트를 꾸준히 하는데 효과를 못 느끼는 분</div>
+          <div class="target-item"><div class="num">2</div>두피가 예민하거나 트러블이 잦은 분</div>
+          <div class="target-item"><div class="num">3</div>손상모가 아닌데 매일 바르고 있는 분</div>
+          <div class="target-item"><div class="num">4</div>흡수가 잘 안 되는 느낌이 드는 분</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 2: 4 MISTAKES -->
+  <section>
+    <div class="container">
+      <div class="sec-label">Common Mistakes</div>
+      <h2 class="sec-title">효과를 못 보게 만드는 4가지 습관</h2>
+      <p class="sec-desc">무심코 하는 이 행동들이 트리트먼트 효과를 떨어뜨립니다.</p>
+
+      <!-- TIP 1 -->
+      <div class="prob-block">
+        <div class="prob-header">
+          <div class="step-badge">1</div>
+          <div class="prob-title">두피까지 듬뿍 바르는 것</div>
+        </div>
+        <p style="font-size:14px; color:var(--text-sub); margin-bottom:16px;">
+          일반 트리트먼트는 모발을 코팅해 손상을 보완하는 제품이라, 두피에 많이 닿으면 모공을 막고 두피 트러블의 원인이 될 수 있습니다.
+        </p>
+        <ul class="checklist">
+          <li>두피 전용 제품이 아니라면 모발에만 바르기</li>
+          <li>두피에서 3~5cm 떨어진 부분부터 도포하기</li>
+          <li>모발 끝쪽에 더 신경 써서 발라주기</li>
+        </ul>
+        <div class="summary-quote">두피 전용이 아니라면, 트리트먼트는 모발에만 발라야 합니다</div>
+      </div>
+
+      <!-- TIP 2 -->
+      <div class="prob-block">
+        <div class="prob-header">
+          <div class="step-badge">2</div>
+          <div class="prob-title">흠뻑 젖은 머리에 바로 바르는 것</div>
+        </div>
+        <p style="font-size:14px; color:var(--text-sub); margin-bottom:16px;">
+          모발에 물기가 너무 많으면 트리트먼트 성분이 모발 표면에서 겉돌면서 제대로 흡수되지 않습니다.
+        </p>
+        <ul class="checklist">
+          <li>수건으로 물기를 한 번 꼭 짜고 바르기</li>
+          <li>물이 뚝뚝 떨어지지 않는 상태에서 도포하기</li>
+          <li>이 한 단계만 지켜도 흡수력이 눈에 띄게 달라짐</li>
+        </ul>
+        <div class="summary-quote">물기를 짜야 트리트먼트가 모발 속으로 들어갑니다</div>
+      </div>
+
+      <!-- TIP 3 -->
+      <div class="prob-block">
+        <div class="prob-header">
+          <div class="step-badge">3</div>
+          <div class="prob-title">바르고 바로 헹구는 것</div>
+        </div>
+        <p style="font-size:14px; color:var(--text-sub); margin-bottom:16px;">
+          제품이 모발에 작용하려면 시간이 필요합니다. 바르자마자 헹구면 성분이 흡수될 틈도 없이 씻겨 내려갑니다.
+        </p>
+        <ul class="checklist">
+          <li>최소 3분은 그대로 두었다가 헹구기</li>
+          <li>여유가 있다면 5분 정도까지 늘려도 좋음</li>
+          <li>타이머를 맞춰두면 시간 지키기가 훨씬 쉬움</li>
+        </ul>
+        <div class="summary-quote">최소 3분, 이 기다림이 트리트먼트 효과를 결정합니다</div>
+      </div>
+
+      <!-- TIP 4 -->
+      <div class="prob-block">
+        <div class="prob-header">
+          <div class="step-badge">4</div>
+          <div class="prob-title">내 모발 상태 상관없이 매일 쓰는 것</div>
+        </div>
+        <p style="font-size:14px; color:var(--text-sub); margin-bottom:16px;">
+          손상모가 아니라면 매일 사용할 필요가 없습니다. 오히려 모발에 과하게 코팅이 쌓여 무겁고 끈적여 보일 수 있어요.
+        </p>
+        <ul class="checklist">
+          <li>손상모가 아니라면 일주일에 2~3번이면 충분</li>
+          <li>손상이 심한 모발은 조금 더 자주 사용해도 무방</li>
+          <li>내 모발 상태를 먼저 확인하고 횟수 정하기</li>
+        </ul>
+        <div class="summary-quote">매일보다 중요한 건 내 모발 상태에 맞는 횟수입니다</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 3: HOW TO -->
+  <section>
+    <div class="container">
+      <div class="sec-label">How To</div>
+      <h2 class="sec-title">트리트먼트 올바르게 쓰는 순서</h2>
+      <p class="sec-desc">이 순서만 지켜도 트리트먼트 효과를 제대로 느낄 수 있습니다.</p>
+
+      <div class="formula-box">
+        <div class="f-label">Treatment Care Formula</div>
+        <div class="f-eq">
+          <span>물기 짜기</span> → <strong>모발에만 도포</strong> →<br />
+          <span>최소 3분 방치</span> → <strong>헹구기 (주 2~3회)</strong>
+        </div>
+      </div>
+
+      <div class="point-list">
+        <div class="point-item">
+          <div class="point-num">1</div>
+          <div class="point-content">
+            <div class="point-title">수건으로 물기 짜기</div>
+            <div class="point-desc">흠뻑 젖은 머리는 흡수를 방해합니다. 수건으로 한 번 꼭 짜고 시작하세요.</div>
+          </div>
+        </div>
+        <div class="point-item">
+          <div class="point-num">2</div>
+          <div class="point-content">
+            <div class="point-title">두피 제외, 모발에만 바르기</div>
+            <div class="point-desc">두피 전용 제품이 아니라면 두피는 피하고 모발 위주로 발라주세요.</div>
+          </div>
+        </div>
+        <div class="point-item">
+          <div class="point-num">3</div>
+          <div class="point-content">
+            <div class="point-title">최소 3분 두었다가 헹구기</div>
+            <div class="point-desc">성분이 작용할 시간을 충분히 주는 것이 효과의 핵심입니다.</div>
+          </div>
+        </div>
+        <div class="point-item">
+          <div class="point-num">4</div>
+          <div class="point-content">
+            <div class="point-title">주 2~3회 사용하기</div>
+            <div class="point-desc">손상모가 아니라면 매일 쓰지 않아도 충분합니다.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 4: CHECKLIST -->
+  <section id="checklist">
+    <div class="container">
+      <div class="sec-label">Checklist</div>
+      <h2 class="sec-title">트리트먼트 사용 전 체크리스트</h2>
+      <div class="card">
+        <div class="progress-card">
+          <div class="progress-bar"><span></span></div>
+          <div class="progress-text">0/4 완료 · 0%</div>
+        </div>
+        <ul class="todo-list" id="todoList">
+          <li class="todo-item"><div class="todo-box"></div>수건으로 물기를 짜고 발랐나요?</li>
+          <li class="todo-item"><div class="todo-box"></div>두피는 피하고 모발에만 발랐나요?</li>
+          <li class="todo-item"><div class="todo-box"></div>최소 3분 이상 두었다가 헹궜나요?</li>
+          <li class="todo-item"><div class="todo-box"></div>내 모발 상태에 맞는 횟수로 사용하고 있나요?</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 5: CLOSING -->
+  <section>
+    <div class="container">
+      <div class="sec-label">Closing</div>
+      <h2 class="sec-title">마무리하며</h2>
+
+      <div class="closing-profile-grid" style="display:grid; grid-template-columns:3fr 2fr; gap:16px; align-items:stretch; margin-bottom:20px;">
+        <div class="closing" style="margin-bottom:0;">
+          <p>
+            트리트먼트는 자주 바른다고<br />
+            좋은 게 아닙니다.<br />
+            <strong>바르는 방법과 시간만 바꿔도</strong><br />
+            훨씬 건강한 머릿결을<br />
+            느낄 수 있습니다.<br /><br />
+            작은 습관 하나가<br />
+            오늘의 머릿결을 결정합니다.
+          </p>
+          <div class="author-note">
+            현장 25년, 미용 교수 경험을 바탕으로<br />
+            앞으로도 실용적인 기준을 자료로 계속 정리해 드리겠습니다. 🙏
+          </div>
+        </div>
+
+        <div style="background:var(--white); border-radius:var(--radius); padding:18px 16px; box-shadow:var(--shadow); display:flex; flex-direction:column; justify-content:center;">
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+            <div style="width:48px; height:48px; border-radius:50%; overflow:hidden; border:2px solid var(--purple-light); flex-shrink:0;">
+              <img src="../profile.png" style="width:100%; height:100%; object-fit:cover; object-position:center top;" alt="민경이즘 프로필" />
+            </div>
+            <div>
+              <div style="font-size:15px; font-weight:900; color:var(--text); margin-bottom:1px;">민경이즘</div>
+              <div style="font-size:11px; color:var(--purple); font-weight:600; line-height:1.4;">헤어디렉터 · 이미지컨설턴트 · 교수</div>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:5px;">
+            <div style="display:flex; gap:6px; align-items:flex-start; font-size:11px; color:var(--text-sub); line-height:1.5;">
+              <span style="flex-shrink:0;">🎓</span><span>겸임교수 · 강의 10년차</span>
+            </div>
+            <div style="display:flex; gap:6px; align-items:flex-start; font-size:11px; color:var(--text-sub); line-height:1.5;">
+              <span style="flex-shrink:0;">🔬</span><span>이학박사 · 향장생물학전공</span>
+            </div>
+            <div style="display:flex; gap:6px; align-items:flex-start; font-size:11px; color:var(--text-sub); line-height:1.5;">
+              <span style="flex-shrink:0;">📚</span><span>교육학석사 · 미용교육전공</span>
+            </div>
+            <div style="display:flex; gap:6px; align-items:flex-start; font-size:11px; color:var(--text-sub); line-height:1.5;">
+              <span style="flex-shrink:0;">✂️</span><span>MIN BEAUTY HAIR · 25년차</span>
+            </div>
+            <div style="display:flex; gap:6px; align-items:flex-start; font-size:11px; color:var(--text-sub); line-height:1.5;">
+              <span style="flex-shrink:0;">📖</span><span>저서 · 행복한성공수업</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p style="font-size:14px; font-weight:700; margin-bottom:16px; color:var(--text);">더 자세한 상담이 필요하시다면</p>
+      <div class="cta-links">
+        <a href="https://open.kakao.com/o/si1Fo8ai" target="_blank" rel="noopener" class="cta-btn">
+          <div class="icon-box">💬</div>
+          <div>
+            <div style="font-size:13px; color:var(--text-sub); font-weight:400;">얼굴형 이미지 맞춤 1:1 상담</div>
+          </div>
+        </a>
+        <a href="https://open.kakao.com/o/svHTxrbi" target="_blank" rel="noopener" class="cta-btn">
+          <div class="icon-box">✂️</div>
+          <div>
+            <div style="font-size:13px; color:var(--text-sub); font-weight:400;">민뷰티헤어 대치 샵 예약</div>
+          </div>
+        </a>
+        <a href="https://smartstore.naver.com/kyobobook/products/9170054197?NaPm=ct%3Dmqdk7duo%7Cci%3D2ad7c9f8100dfdbb996eb6bb89362d081750c6e0%7Ctr%3Dboknx%7Csn%3D172908%7Chk%3Dc3f09810d8ebd5ece1cd92cd2234ce0f2b0c1a95" target="_blank" rel="noopener" class="cta-btn">
+          <div class="icon-box">📕</div>
+          <div>
+            <div style="font-size:13px; color:var(--text-sub); font-weight:400;">책 소개 · 행복한성공수업</div>
+          </div>
+        </a>
+        <a href="https://form.naver.com/response/E9FpEOSa5QdCwW_n1JGsnA" target="_blank" rel="noopener" class="cta-btn">
+          <div class="icon-box">🏢</div>
+          <div>
+            <div style="font-size:13px; color:var(--text-sub); font-weight:400;">기업 · 기관 외부 교육 문의</div>
+          </div>
+        </a>
+        <a href="https://form.naver.com/response/mkPLwslRloX5F2r_s34MBA" target="_blank" rel="noopener" class="cta-btn">
+          <div class="icon-box">🎓</div>
+          <div>
+            <div style="font-size:13px; color:var(--text-sub); font-weight:400;">1:1 컨설팅 · 교육 문의</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 <strong>민경이즘</strong> · 무단 전재 및 재배포 금지</p>
+    <p style="margin-top:6px;">이 문서의 저작권은 '민경이즘'에 있습니다.</p>
+  </footer>
+
+  <script>
+    const todoItems = document.querySelectorAll('.todo-item');
+    const progressBar = document.querySelector('.progress-bar > span');
+    const progressText = document.querySelector('.progress-text');
+
+    function updateProgress() {
+      const total = todoItems.length;
+      const checked = Array.from(todoItems).filter((item) => item.classList.contains('active')).length;
+      const percent = total ? Math.round((checked / total) * 100) : 0;
+
+      if (progressBar) progressBar.style.width = `${percent}%`;
+      if (progressText) progressText.textContent = `${checked}/${total} 완료 · ${percent}%`;
+    }
+
+    todoItems.forEach((item) => {
+      item.addEventListener('click', () => {
+        item.classList.toggle('active');
+        updateProgress();
+      });
+    });
+
+    updateProgress();
+  </script>
+
+</body>
+</html>
